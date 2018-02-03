@@ -11,11 +11,9 @@ module.exports = function ({filename}) { // rename filename to format filename
           return {file, position, style}
         }).sort((a, b) =>
           b.position - a.position
-        ).map(obj => {
-          console.log(obj.position, obj.file)
-          return obj.style
-        }).join('')
-
+        ).map(obj =>
+          obj.style
+        ).join(' ')
         const hash = getHashDigest(content, 'md5', 'base64', 10)
         filename = filename.replace(/\[name\]/, entry).replace(/\[hash\]/, hash)
         compilation.assets[filename] = {
