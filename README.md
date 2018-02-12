@@ -30,7 +30,7 @@ Add the loader and plugin to you webpack config.
   },
   plugins: [
     new ExtractCssHmrPlugin({
-      filename: '[name]-[hash].css'
+      identify: '[name]-[hash].css'
     })
   ]
 ``
