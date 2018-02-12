@@ -1,7 +1,7 @@
 import fs from 'fs'
 import getHashDigest from 'loader-utils/lib/getHashDigest'
 
-module.exports = function ({filename}) { // rename filename to format filename
+module.exports = function ({identify}) {
   this.apply = compiler => {
     compiler.plugin('emit', (compilation, next) => {
       const hmrCssEntries = compilation.hmrCssEntries || {}
@@ -15,7 +15,7 @@ module.exports = function ({filename}) { // rename filename to format filename
           obj.style
         ).join(' ')
         const hash = getHashDigest(content, 'md5', 'base64', 10)
-        filename = filename.replace(/\[name\]/, entry).replace(/\[hash\]/, hash)
+        const filename = identify.replace(/\[name\]/, entry).replace(/\[hash\]/, hash)
         compilation.assets[filename] = {
           source: () => content,
           size: () => content.length
@@ -27,7 +27,6 @@ module.exports = function ({filename}) { // rename filename to format filename
       next()
     })
     compiler.plugin('after-emit', (compilation, next) => {
-      // also unlink old files
       Object.keys(compilation.assets).forEach(key => {
         fs.writeFileSync(`${compiler.outputPath}/${key}`, compilation.assets[key].source())
       })

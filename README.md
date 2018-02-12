@@ -1,5 +1,11 @@
 # extract-css-hmr
-Extract CSS from hot module reloading
+This is a node module which exposes a webpack loader and plugin to extract css from hot module reloads.
+
+## Problem
+You are trying to hot reload css server side and you use ExtractTextWebpackPLugin.
+
+## Solution
+Use ExtractTextWebpackPLugin for production and ExtractCssHMR (this module) for development.
 
 ## Install
 
@@ -7,32 +13,24 @@ Extract CSS from hot module reloading
   npm install extract-css-hmr --save-dev
 ```
 
-## Loader
-Add the loader to you webpack module rules.
+## Config
+Add the loader and plugin to you webpack config.
 
 ```es6
-  {
-    module: {
-      rules: [{
-          test: /\.css$/,
-          exclude: /node_modules/,
-          use: ['extract-css-hmr/loader']
-      }]
-    }
-  }
-```
-
-## Plugin
-Add the plugin to your webpack plugins config.
-
-```es6
-  import ExtractCssHmrPlugin from 'extract-css-hmr/plugin'
-  
-  { 
-    plugins: [
-      new ExtractCssHmrPlugin({
-        filename: '[name]-[hash].css'
-      })
-    ]
-  }
-```
+  module: {
+    rules: [{
+      test: /\.scss$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'extract-css-hmr/loader',
+        'sass-loader'
+      ]
+    }]
+  },
+  plugins: [
+    new ExtractCssHmrPlugin({
+      filename: '[name]-[hash].css'
+    })
+  ]
+``
